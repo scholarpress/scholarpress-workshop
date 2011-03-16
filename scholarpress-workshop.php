@@ -28,14 +28,12 @@ Author URI: http://scholarpress.net/
 */
 
 class ScholarPress_Workshop {
-        
+
     /**
      * ScholarPress Workshop constructor
      *
      * @since 1.0
      * @uses add_action()
-     * @uses register_activation_hook()
-     * @uses register_deactivation_hook()
      */
 	function scholarpress_workshop() {
 		add_action( 'init', array( $this, 'init' ) );
@@ -43,17 +41,22 @@ class ScholarPress_Workshop {
 		add_action( 'plugins_loaded', array( $this, 'loaded' ) );
 		// When Researcher is loaded, get includes.
 		add_action( 'scholarpress_workshop_loaded', array( $this, 'includes' ) );
-        add_action( 'scholarpress_workshop_loaded', array($this, 'flush_rewrite_rules') );
-        
+
 		// When Researcher is initialized, add localization files.
 		add_action( 'scholarpress_workshop_init', array( $this, 'textdomain' ) );
-		
+
 		// Load the post types
 		add_action( 'scholarpress_workshop_init', array( $this, 'register_post_types' ) );
-		
+
 		add_action( 'scholarpress_workshop_admin_init', array( $this, 'add_meta_boxes') );
-		
+
 		add_action( 'save_post', array( $this, 'save_post') );
+
+		// Activation sequence
+		register_activation_hook( __FILE__, array( $this, 'activation' ) );
+
+		// Deactivation sequence
+		register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
 	}
 
     /**
@@ -70,12 +73,21 @@ class ScholarPress_Workshop {
 	    do_action( 'scholarpress_workshop_admin_init');
 	}
 
-	/**
+    /**
      * Adds a plugin loaded action.
      */
 	function loaded() {
 		do_action( 'scholarpress_workshop_loaded' );
 	}
+
+    function activation() {
+        add_option('scholarpress_workshop_flush', 'true');
+    }
+
+    function deactivation() {
+        delete_option('scholarpress_workshop_flush');
+        flush_rewrite_rules();
+    }
 
     /**
      * Includes other necessary plugin files.
@@ -106,7 +118,11 @@ class ScholarPress_Workshop {
       		return;
       	}
 	}
-	
+    
+	/**
+	 * Registers our 'sp_workshop' custom post type.
+	 *
+	 */
 	function register_post_types() {
 	     $workshopLabels = array(
 			'name' => _x('Workshops', 'workshop general name'),
@@ -132,16 +148,27 @@ class ScholarPress_Workshop {
 			'capability_type'       => 'page',
 			'hierarchical'          => true,
             'supports'              => array( 'title', 'editor', 'custom-fields' ),
-			'rewrite'               => array("slug" => "workshop") // Permalinks format
+			'rewrite'               => array("slug" => "workshop")
 	    );
 		
 		register_post_type( 'sp_workshop', $workshopPostDef );
+
+		if (get_option('scholarpress_workshop_flush') == 'true') {
+            flush_rewrite_rules();
+            delete_option('scholarpress_workshop_flush');
+        }
 	}
 	
+	/**
+	 * Adds our post meta boxes for the 'sp_workshop' post type.
+	 */
 	function add_meta_boxes() {
         add_meta_box("zotero-information", "Zotero Information", array($this, "zotero_meta_box"), "sp_workshop", "side", "low");
 	}
 
+    /**
+     * Meta box for Zotero information.
+     */
     function zotero_meta_box(){
         global $post;
         $custom = get_post_custom($post->ID);
@@ -176,6 +203,9 @@ class ScholarPress_Workshop {
         <?php
     }
     
+    /**
+     * Saves our custom post metadata. Used on the 'save_post' hook.
+     */
     function save_post(){
         global $post;
         if (array_key_exists('zotero_user_id', $_POST)) {
@@ -184,10 +214,6 @@ class ScholarPress_Workshop {
         if (array_key_exists('zotero_api_key', $_POST)) { 
             update_post_meta($post->ID, "zotero_api_key", $_POST["zotero_api_key"]);
         }
-    }
-
-    function flush_rewrite_rules() {
-        
     }
 }
 
