@@ -127,11 +127,11 @@ class ScholarPress_Workshop {
             'name' => _x('Workshops', 'workshop general name'),
             'singular_name' => _x('Workshop', 'single workshop entry'),
             'add_new' => _x('Add New', 'workshop'),
-            'add_new_item' => __('Add New Workshop'),
-            'edit_item' => __('Edit Workshop Entry'),
-            'new_item' => __('New Workshop Entry'),
-            'view_item' => __('View Workshop Entry'),
-            'search_items' => __('Search Workshops'),
+            'add_new_item' => __('Add New Workshop', 'spworkshop'),
+            'edit_item' => __('Edit Workshop Entry', 'spworkshop'),
+            'new_item' => __('New Workshop Entry', 'spworkshop'),
+            'view_item' => __('View Workshop Entry', 'spworkshop'),
+            'search_items' => __('Search Workshops', 'spworkshop'),
             'not_found' =>  __('No entries found'),
             'not_found_in_trash' => __('No entries found in Trash'),
             'parent_item_colon' => ''
@@ -182,10 +182,10 @@ class ScholarPress_Workshop {
             $zotero_api_key = '';
         }
     ?>
-        <label>Zotero User ID:</label>
+        <label><?php _e('Zotero User ID:', 'spworkshop'); ?></label>
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
-        <label>Zotero API Key:</label>
+        <label><?php _e('Zotero API Key:', 'spworkshop'); ?></label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
     <?php
     }
