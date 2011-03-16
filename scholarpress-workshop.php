@@ -35,50 +35,50 @@ class ScholarPress_Workshop {
      * @since 1.0
      * @uses add_action()
      */
-	function scholarpress_workshop() {
-		add_action( 'init', array( $this, 'init' ) );
-		add_action( 'admin_init', array( $this, 'admin_init' ) );
-		add_action( 'plugins_loaded', array( $this, 'loaded' ) );
-		// When Researcher is loaded, get includes.
-		add_action( 'scholarpress_workshop_loaded', array( $this, 'includes' ) );
+    function scholarpress_workshop() {
+        add_action( 'init', array( $this, 'init' ) );
+        add_action( 'admin_init', array( $this, 'admin_init' ) );
+        add_action( 'plugins_loaded', array( $this, 'loaded' ) );
+        // When Researcher is loaded, get includes.
+        add_action( 'scholarpress_workshop_loaded', array( $this, 'includes' ) );
 
-		// When Researcher is initialized, add localization files.
-		add_action( 'scholarpress_workshop_init', array( $this, 'textdomain' ) );
+        // When Researcher is initialized, add localization files.
+        add_action( 'scholarpress_workshop_init', array( $this, 'textdomain' ) );
 
-		// Load the post types
-		add_action( 'scholarpress_workshop_init', array( $this, 'register_post_types' ) );
+        // Load the post types
+        add_action( 'scholarpress_workshop_init', array( $this, 'register_post_types' ) );
 
-		add_action( 'scholarpress_workshop_admin_init', array( $this, 'add_meta_boxes') );
+        add_action( 'scholarpress_workshop_admin_init', array( $this, 'add_meta_boxes') );
 
-		add_action( 'save_post', array( $this, 'save_post') );
+        add_action( 'save_post', array( $this, 'save_post') );
 
-		// Activation sequence
-		register_activation_hook( __FILE__, array( $this, 'activation' ) );
+        // Activation sequence
+        register_activation_hook( __FILE__, array( $this, 'activation' ) );
 
-		// Deactivation sequence
-		register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
-	}
+        // Deactivation sequence
+        register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
+    }
 
     /**
      * Adds a plugin initialization action.
      */
-	function init() {
-		do_action( 'scholarpress_workshop_init' );
-	}
+    function init() {
+        do_action( 'scholarpress_workshop_init' );
+    }
 
-	/**
+    /**
      * Adds a plugin admin initialization action.
      */
-	function admin_init() {
-	    do_action( 'scholarpress_workshop_admin_init');
-	}
+    function admin_init() {
+        do_action( 'scholarpress_workshop_admin_init');
+    }
 
     /**
      * Adds a plugin loaded action.
      */
-	function loaded() {
-		do_action( 'scholarpress_workshop_loaded' );
-	}
+    function loaded() {
+        do_action( 'scholarpress_workshop_loaded' );
+    }
 
     function activation() {
         add_option('scholarpress_workshop_flush', 'true');
@@ -90,11 +90,11 @@ class ScholarPress_Workshop {
     }
 
     /**
-     * Includes other necessary plugin files.
-     */
-	function includes() {
+    * Includes other necessary plugin files.
+    */
+    function includes() {
         // require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
-	}
+    }
 
     /**
      * Handles localization files. Added on scholarpress_workshop_init. 
@@ -105,66 +105,65 @@ class ScholarPress_Workshop {
      * @uses load_textdomain()
      * @uses get_locale()
      */
-	function textdomain() {
-		$locale = get_locale();
-		$mofile_custom = WP_CONTENT_DIR . "/scholarpress-workshop-files/languages/spworkshop-$locale.mo";
-		$mofile_packaged = WP_PLUGIN_DIR . "/scholarpress-workshop/languages/spworkshop-$locale.mo";
+    function textdomain() {
+        $locale = get_locale();
+        $mofile_custom = WP_CONTENT_DIR . "/scholarpress-workshop-files/languages/spworkshop-$locale.mo";
+        $mofile_packaged = WP_PLUGIN_DIR . "/scholarpress-workshop/languages/spworkshop-$locale.mo";
 
-    	if ( file_exists( $mofile_custom ) ) {
-      		load_textdomain( 'spworkshop', $mofile_custom );
-      		return;
-      	} else if ( file_exists( $mofile_packaged ) ) {
-      		load_textdomain( 'spworkshop', $mofile_packaged );
-      		return;
-      	}
-	}
-    
-	/**
-	 * Registers our 'sp_workshop' custom post type.
-	 *
-	 */
-	function register_post_types() {
-	     $workshopLabels = array(
-			'name' => _x('Workshops', 'workshop general name'),
-			'singular_name' => _x('Workshop', 'single workshop entry'),
-			'add_new' => _x('Add New', 'workshop'),
-			'add_new_item' => __('Add New Workshop'),
-			'edit_item' => __('Edit Workshop Entry'),
-			'new_item' => __('New Workshop Entry'),
-			'view_item' => __('View Workshop Entry'),
-			'search_items' => __('Search Workshops'),
-			'not_found' =>  __('No entries found'),
-			'not_found_in_trash' => __('No entries found in Trash'),
-			'parent_item_colon' => ''
-		  );
-		
-		$workshopPostDef = array(
-			'label'                 => __( 'workshop', 'spworkshop' ),
-			'labels'                => $workshopLabels,
-			'exclude_from_search'   => true,
-			'publicly_queryable'    => true,
-			'_builtin'              => false,
-			'show_ui'               => true,
-			'capability_type'       => 'page',
-			'hierarchical'          => true,
+        if ( file_exists( $mofile_custom ) ) {
+            load_textdomain( 'spworkshop', $mofile_custom );
+            return;
+        } else if ( file_exists( $mofile_packaged ) ) {
+            load_textdomain( 'spworkshop', $mofile_packaged );
+            return;
+        }
+    }
+
+    /**
+     * Registers our 'sp_workshop' custom post type.
+     */
+    function register_post_types() {
+        $workshopLabels = array(
+            'name' => _x('Workshops', 'workshop general name'),
+            'singular_name' => _x('Workshop', 'single workshop entry'),
+            'add_new' => _x('Add New', 'workshop'),
+            'add_new_item' => __('Add New Workshop'),
+            'edit_item' => __('Edit Workshop Entry'),
+            'new_item' => __('New Workshop Entry'),
+            'view_item' => __('View Workshop Entry'),
+            'search_items' => __('Search Workshops'),
+            'not_found' =>  __('No entries found'),
+            'not_found_in_trash' => __('No entries found in Trash'),
+            'parent_item_colon' => ''
+        );
+
+        $workshopPostDef = array(
+            'label'                 => __( 'workshop', 'spworkshop' ),
+            'labels'                => $workshopLabels,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => true,
+            '_builtin'              => false,
+            'show_ui'               => true,
+            'capability_type'       => 'page',
+            'hierarchical'          => true,
             'supports'              => array( 'title', 'editor', 'custom-fields' ),
-			'rewrite'               => array("slug" => "workshop")
-	    );
-		
-		register_post_type( 'sp_workshop', $workshopPostDef );
+            'rewrite'               => array("slug" => "workshop")
+        );
 
-		if (get_option('scholarpress_workshop_flush') == 'true') {
+        register_post_type( 'sp_workshop', $workshopPostDef );
+
+        if (get_option('scholarpress_workshop_flush') == 'true') {
             flush_rewrite_rules();
             delete_option('scholarpress_workshop_flush');
         }
-	}
-	
-	/**
-	 * Adds our post meta boxes for the 'sp_workshop' post type.
-	 */
-	function add_meta_boxes() {
+    }
+
+    /**
+     * Adds our post meta boxes for the 'sp_workshop' post type.
+     */
+    function add_meta_boxes() {
         add_meta_box("zotero-information", "Zotero Information", array($this, "zotero_meta_box"), "sp_workshop", "side", "low");
-	}
+    }
 
     /**
      * Meta box for Zotero information.
@@ -182,15 +181,15 @@ class ScholarPress_Workshop {
         } else {
             $zotero_api_key = '';
         }
-        ?>
+    ?>
         <label>Zotero User ID:</label>
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
         <label>Zotero API Key:</label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
-        <?php
+    <?php
     }
-    
+
     /**
      * Saves our custom post metadata. Used on the 'save_post' hook.
      */
