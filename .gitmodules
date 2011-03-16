@@ -1,0 +1,3 @@
+[submodule "phpZotero"]
+	path = phpZotero
+	url = git@github.com:clioweb/phpZotero
