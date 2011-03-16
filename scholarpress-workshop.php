@@ -81,7 +81,7 @@ class ScholarPress_Workshop {
      * Includes other necessary plugin files.
      */
 	function includes() {
-        // require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
+         require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
 	}
 
     /**
@@ -160,6 +160,18 @@ class ScholarPress_Workshop {
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
         <label>Zotero API Key:</label>
+        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <br />
+        <label>Zotero Collection Key:</label>
+        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <br />
+        <label>Conference Name:</label>
+        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />        
+        <br />
+        <label>Conference Date:</label>
+        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <br />
+        <label>Conference Location:</label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
         <?php
     }
