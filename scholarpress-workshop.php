@@ -57,6 +57,9 @@ class ScholarPress_Workshop {
 
         // Deactivation sequence
         register_deactivation_hook( __FILE__, array( $this, 'deactivation' ) );
+
+        add_shortcode('spworkshopform', array($this, 'shortcode'));
+
     }
 
     /**
@@ -201,6 +204,43 @@ class ScholarPress_Workshop {
         if (array_key_exists('zotero_api_key', $_POST)) { 
             update_post_meta($post->ID, "zotero_api_key", $_POST["zotero_api_key"]);
         }
+    }
+
+    /**
+     * Form for submitting Zotero items to a workshop.
+     *
+     * @uses save_zotero_item()
+     */
+    function submission_form() {
+        global $post;
+
+        if (!empty($_POST)) {
+            $this->save_zotero_item($_POST);
+        }
+    ?>
+    <form method="post">
+            <label>Title</label><br />
+            <input name="title" value=""><br />
+        <input type="submit" name="Save" value="Save">
+    </form>
+    <?php
+    }
+
+    /**
+     * Shortcode for Zotero item submission form.
+     *
+     * @uses submission_form()
+     * @return string An HTML form.
+     */
+    function shortcode($attr) {
+        return $this->submission_form();
+    }
+
+    /**
+     * Saves Zotero item.
+     */
+    function save_zotero_item($data) {
+
     }
 }
 
