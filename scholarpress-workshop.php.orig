@@ -90,11 +90,19 @@ class ScholarPress_Workshop {
     }
 
     /**
+<<<<<<< HEAD
      * Includes other necessary plugin files.
      */
 	function includes() {
          require( dirname( __FILE__ ).'/../phpZotero/phpZotero.php' );
 	}
+=======
+    * Includes other necessary plugin files.
+    */
+    function includes() {
+        // require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
+    }
+>>>>>>> 4d7640ccb1675f8760083828938f5cbfac71ca0e
 
     /**
      * Handles localization files. Added on scholarpress_workshop_init. 
@@ -181,6 +189,7 @@ class ScholarPress_Workshop {
         } else {
             $zotero_api_key = '';
         }
+<<<<<<< HEAD
         if (array_key_exists('zotero_collection_key', $custom)) {
             $zotero_collection_key = $custom["zotero_collection_key"][0];
         } else {
@@ -203,10 +212,15 @@ class ScholarPress_Workshop {
         } 
  		?>
         <label>Zotero User ID:</label>
+=======
+    ?>
+        <label><?php _e('Zotero User ID:', 'spworkshop'); ?></label>
+>>>>>>> 4d7640ccb1675f8760083828938f5cbfac71ca0e
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
         <label><?php _e('Zotero API Key:', 'spworkshop'); ?></label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+<<<<<<< HEAD
         <br />
         <label>Zotero Collection Key:</label>
         <input name="zotero_collection_key" value="<?php echo $zotero_collection_key; ?>" />
@@ -220,6 +234,9 @@ class ScholarPress_Workshop {
         <label>Conference Location:</label>
         <input name="sp_conference_location" value="<?php echo $sp_conference_location; ?>" />
         <?php
+=======
+    <?php
+>>>>>>> 4d7640ccb1675f8760083828938f5cbfac71ca0e
     }
 
     /**
