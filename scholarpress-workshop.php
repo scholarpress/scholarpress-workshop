@@ -96,7 +96,7 @@ class ScholarPress_Workshop {
      * Includes other necessary plugin files.
      */
 	function includes() {
-         require( dirname( __FILE__ ).'/../phpZotero/phpZotero.php' );
+         require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
 	}
 
     /**
@@ -205,22 +205,22 @@ class ScholarPress_Workshop {
             $sp_conference_location = '';
         } 
  		?>
-        <label>Zotero User ID:</label>
+        <label><?php _e('Zotero User ID:', 'spworkshop'); ?></label>
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
         <label><?php _e('Zotero API Key:', 'spworkshop'); ?></label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
         <br />
-        <label>Zotero Collection Key:</label>
+        <label><?php _e('Zotero Collection Key:', 'spworkshop'); ?></label>
         <input name="zotero_collection_key" value="<?php echo $zotero_collection_key; ?>" />
         <br />
-        <label>Conference Name:</label>
+        <label><?php _e('Conference Name:', 'spworkshop'); ?></label>
         <input name="sp_conference_name" value="<?php echo $sp_conference_name; ?>" />        
         <br />
-        <label>Conference Date:</label>
+        <label><?php _e('Conference Date:', 'spworkshop'); ?></label>
         <input name="sp_conference_date" value="<?php echo $sp_conference_date; ?>" />
         <br />
-        <label>Conference Location:</label>
+        <label><?php _e('Conference Location:', 'spworkshop'); ?></label>
         <input name="sp_conference_location" value="<?php echo $sp_conference_location; ?>" />
         <?php
     }
@@ -266,6 +266,12 @@ class ScholarPress_Workshop {
     <form method="post">
             <label>Title</label><br />
             <input name="title" value=""><br />
+             <label>Last Name</label><br />
+            <input name="lastName" value=""><br />
+             <label>First Name</label><br />
+            <input name="firstName" value=""><br />
+             <label>Abstract</label><br />
+            <textarea cols="50" rows="4" name="abstract"></textarea><br />
         <input type="submit" name="Save" value="Save">
     </form>
     <?php
@@ -286,7 +292,54 @@ class ScholarPress_Workshop {
      */
     function save_zotero_item($data) {
 
+ 		echo $title;
+		global $post;
+        $custom = get_post_custom($post->ID);
+        $zotero_user_id = $custom["zotero_user_id"][0];
+        $zotero_api_key = $custom["zotero_api_key"][0];
+        $zotero_collection_key = $custom["zotero_collection_key"][0];
+        $date =  $custom["sp_conference_date"][0];
+        $location =  $custom["sp_conference_location"][0];
+        $conferenceName =  $custom["sp_conference_name"][0];
+		$title = $data['title'];
+		$lastName = $data['lastName'];
+		$firstName = $data['firstName'];
+		$abstract = $data['abstract'];
+
+	    $itemFields =
+			'{
+			   "items" : [
+				   {
+					   "itemType" : "conferencePaper",
+					   "title" : "'.$title.'",
+					   "creators" : [
+						   {
+							   "creatorType":"author",
+							   "firstName" : "'.$firstName.'",
+							   "lastName" : "'.$lastName.'"
+						   }
+					   ],
+					   "abstractNote" : "'.$abstract.'",
+					   "date" : "'.$date.'",
+					   "conferenceName" : "'.$conferenceName.'",
+					   "place" : "'.$location.'"
+				   }
+			   ]
+			}';   
+      
+        
+	    $zotero = new phpZotero($zotero_api_key);
+    	$newItem = $zotero->createNewItem($zotero_user_id, $itemFields);    	
+		$itemKey = $zotero->getKey($newItem);
+		if ($zotero_collection_key) {
+			$zotero->addItemsToCollection($zotero_user_id, $zotero_collection_key, $itemKey);
+		}
+		echo $itemKey;
+
     }
+
+
+    
 }
 
 $scholarPressWorkshop = new ScholarPress_Workshop();
