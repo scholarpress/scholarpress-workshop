@@ -93,7 +93,7 @@ class ScholarPress_Workshop {
      * Includes other necessary plugin files.
      */
 	function includes() {
-         require( dirname( __FILE__ ).'/phpZotero/phpZotero.php' );
+         require( dirname( __FILE__ ).'/../phpZotero/phpZotero.php' );
 	}
 
     /**
@@ -182,7 +182,27 @@ class ScholarPress_Workshop {
         } else {
             $zotero_api_key = '';
         }
-        ?>
+        if (array_key_exists('zotero_collection_key', $custom)) {
+            $zotero_collection_key = $custom["zotero_collection_key"][0];
+        } else {
+            $zotero_collection_key = '';
+        }
+        if (array_key_exists('sp_conference_name', $custom)) {
+            $sp_conference_name = $custom["sp_conference_name"][0];
+        } else {
+            $sp_conference_name = '';
+        }
+        if (array_key_exists('sp_conference_date', $custom)) {
+            $sp_conference_date = $custom["sp_conference_date"][0];
+        } else {
+            $sp_conference_date = '';
+        }
+        if (array_key_exists('sp_conference_location', $custom)) {
+            $sp_conference_location = $custom["sp_conference_location"][0];
+        } else {
+            $sp_conference_location = '';
+        } 
+ 		?>
         <label>Zotero User ID:</label>
         <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
         <br />
@@ -190,16 +210,16 @@ class ScholarPress_Workshop {
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
         <br />
         <label>Zotero Collection Key:</label>
-        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <input name="zotero_collection_key" value="<?php echo $zotero_collection_key; ?>" />
         <br />
         <label>Conference Name:</label>
-        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />        
+        <input name="sp_conference_name" value="<?php echo $sp_conference_name; ?>" />        
         <br />
         <label>Conference Date:</label>
-        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <input name="sp_conference_date" value="<?php echo $sp_conference_date; ?>" />
         <br />
         <label>Conference Location:</label>
-        <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
+        <input name="sp_conference_location" value="<?php echo $sp_conference_location; ?>" />
         <?php
     }
     
@@ -214,6 +234,19 @@ class ScholarPress_Workshop {
         if (array_key_exists('zotero_api_key', $_POST)) { 
             update_post_meta($post->ID, "zotero_api_key", $_POST["zotero_api_key"]);
         }
+        if (array_key_exists('zotero_collection_key', $_POST)) { 
+            update_post_meta($post->ID, "zotero_collection_key", $_POST["zotero_collection_key"]);
+        }
+        if (array_key_exists('sp_conference_name', $_POST)) { 
+            update_post_meta($post->ID, "sp_conference_name", $_POST["sp_conference_name"]);
+        }
+        if (array_key_exists('sp_conference_date', $_POST)) { 
+            update_post_meta($post->ID, "sp_conference_date", $_POST["sp_conference_date"]);
+        }
+        if (array_key_exists('sp_conference_location', $_POST)) { 
+            update_post_meta($post->ID, "sp_conference_location", $_POST["sp_conference_location"]);
+        }
+
     }
 }
 
