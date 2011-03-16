@@ -174,10 +174,22 @@ class ScholarPress_Workshop {
     function zotero_meta_box(){
         global $post;
         $custom = get_post_custom($post->ID);
-        if (array_key_exists('zotero_user_id', $custom)) {
-            $zotero_user_id = $custom["zotero_user_id"][0];
+        if (array_key_exists('zotero_library_type', $custom)) {
+            $zotero_library_type = $custom["zotero_library_type"][0];
         } else {
-            $zotero_user_id = '';
+            $zotero_library_type = 'users';
+        }
+        if ($zotero_library_type == 'groups') {
+        	$userChecked = '';
+        	$groupChecked = 'checked';
+        } else {
+        	$userChecked = 'checked';
+        	$groupChecked = '';
+        }
+        if (array_key_exists('zotero_id', $custom)) {
+            $zotero_id = $custom["zotero_id"][0];
+        } else {
+            $zotero_id = '';
         }
         if (array_key_exists('zotero_api_key', $custom)) {
             $zotero_api_key = $custom["zotero_api_key"][0];
@@ -203,15 +215,17 @@ class ScholarPress_Workshop {
             $sp_conference_location = $custom["sp_conference_location"][0];
         } else {
             $sp_conference_location = '';
-        } 
+        }  		
  		?>
-        <label><?php _e('Zotero User ID:', 'spworkshop'); ?></label>
-        <input name="zotero_user_id" value="<?php echo $zotero_user_id; ?>" />
+  		<label><input type="radio" name="zotero_library_type" <?php echo $userChecked; ?> value="users"/> User ID</label>
+        <input name="zotero_id" value="<?php echo $zotero_id; ?>" />
         <br />
-        <label><?php _e('Zotero API Key:', 'spworkshop'); ?></label>
+		<label><input type="radio" name="zotero_library_type" <?php echo $groupChecked; ?> value="groups"/> Group ID</label>
+		<br />
+        <label><?php _e('API Key:', 'spworkshop'); ?></label>
         <input name="zotero_api_key" value="<?php echo $zotero_api_key; ?>" />
         <br />
-        <label><?php _e('Zotero Collection Key:', 'spworkshop'); ?></label>
+        <label><?php _e('Collection Key:', 'spworkshop'); ?></label>
         <input name="zotero_collection_key" value="<?php echo $zotero_collection_key; ?>" />
         <br />
         <label><?php _e('Conference Name:', 'spworkshop'); ?></label>
@@ -230,8 +244,11 @@ class ScholarPress_Workshop {
      */
     function save_post(){
         global $post;
-        if (array_key_exists('zotero_user_id', $_POST)) {
-            update_post_meta($post->ID, "zotero_user_id", $_POST["zotero_user_id"]);
+        if (array_key_exists('zotero_library_type', $_POST)) {
+            update_post_meta($post->ID, "zotero_library_type", $_POST["zotero_library_type"]);
+        }
+        if (array_key_exists('zotero_id', $_POST)) {
+            update_post_meta($post->ID, "zotero_id", $_POST["zotero_id"]);
         }
         if (array_key_exists('zotero_api_key', $_POST)) { 
             update_post_meta($post->ID, "zotero_api_key", $_POST["zotero_api_key"]);
@@ -294,7 +311,8 @@ class ScholarPress_Workshop {
 
 		global $post;
         $custom = get_post_custom($post->ID);
-        $zotero_user_id = $custom["zotero_user_id"][0];
+		$zotero_library_type = $custom["zotero_library_type"][0];
+        $zotero_id = $custom["zotero_id"][0];
         $zotero_api_key = $custom["zotero_api_key"][0];
         $zotero_collection_key = $custom["zotero_collection_key"][0];
         $date =  $custom["sp_conference_date"][0];
@@ -328,10 +346,11 @@ class ScholarPress_Workshop {
       
         
 	    $zotero = new phpZotero($zotero_api_key);
-    	$newItem = $zotero->createNewItem($zotero_user_id, $itemFields);    	
-		$itemKey = $zotero->getKey($newItem);
+    	$newItem = $zotero->createItem($zotero_id, $itemFields, $zotero_library_type);
+    	$dom = $zotero->getDom($newItem);
+		$itemKey = $zotero->getKey($dom);
 		if ($zotero_collection_key) {
-			$zotero->addItemsToCollection($zotero_user_id, $zotero_collection_key, $itemKey);
+			$zotero->addItemsToCollection($zotero_id, $zotero_collection_key, $itemKey, $zotero_library_type);
 		}
     }
 
