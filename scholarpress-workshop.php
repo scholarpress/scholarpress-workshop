@@ -292,7 +292,6 @@ class ScholarPress_Workshop {
      */
     function save_zotero_item($data) {
 
- 		echo $title;
 		global $post;
         $custom = get_post_custom($post->ID);
         $zotero_user_id = $custom["zotero_user_id"][0];
@@ -334,8 +333,6 @@ class ScholarPress_Workshop {
 		if ($zotero_collection_key) {
 			$zotero->addItemsToCollection($zotero_user_id, $zotero_collection_key, $itemKey);
 		}
-		echo $itemKey;
-
     }
 
 
