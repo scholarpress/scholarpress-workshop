@@ -221,10 +221,12 @@ class ScholarPress_Workshop {
         ?>
         <p><label for="zotero_library_type"><strong>Zotero Library Type</strong></label></p>
         <p><em>The type of library you wish to use.</em></p>
-        <p><select name="zotero_library_type">
+        <p>
+        <select name="zotero_library_type">
           <option value="users"<?php echo $userChecked; ?>>User Library</option>
           <option value="groups"<?php echo $groupChecked; ?>>Group Library</option>
         </select>
+        </p>
         <p><label for="zotero_id"><strong>Zotero ID</strong></label></p>
         <p><input name="zotero_id" size="6" value="<?php echo $zotero_id; ?>" /></p>
 
